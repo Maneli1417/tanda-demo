@@ -38,8 +38,8 @@ button.sm{padding:6px 10px;font-size:.8rem}
 <body>
 <div class="box">
   <div id="iBan" class="inst">
-    <span>📲 <b>Instala esta App</b> en tu móvil</span>
-    <button class="sm" onclick="inst()">Instalar</button>
+    <span>📲 <b>Guarda esta App</b> en tu pantalla</span>
+    <button class="sm" onclick="inst()">Guardar</button>
   </div>
 
   <div class="top">
@@ -122,7 +122,7 @@ const theme=()=>{
   document.querySelectorAll('.cur').forEach(e=>e.innerText=db.cfg.cur);
 };
 function inst(){
-  alert('📲 Para instalarla como App:\n\n• Android (Chrome): Toca los 3 puntos (⋮) arriba a la derecha > "Añadir a pantalla de inicio".\n• iPhone (Safari): Toca Compartir (⬆️) abajo > "Añadir a pantalla de inicio".');
+  alert('📲 Cómo guardarla en la pantalla de tu móvil:\n\n• En Android (Chrome):\n1. Toca los 3 puntos (⋮) arriba a la derecha.\n2. Toca "Añadir a pantalla de inicio".\n3. Elige "Crear acceso directo" y dale a Añadir.\n\n• En iPhone (Safari):\n1. Toca Compartir (⬆️) abajo.\n2. Toca "Añadir a pantalla de inicio" y dale a Añadir.');
 }
 function go(v){
   ['vList','vNew','vAct','vCfg'].forEach(id=>document.getElementById(id).classList.add('hide'));
@@ -182,8 +182,3 @@ function waOne(i,p){
   let txt=p?`✅ Hola *${t.ms[i]}*, recibido tu aporte de *${t.amt}${c}* (Ronda ${t.r+1} - ${t.name}).`:`👋 Hola *${t.ms[i]}*, te recuerdo tu aporte de *${t.amt}${c}* para la Ronda ${t.r+1} de *${t.name}*.`;
   window.open(waUrl+encodeURIComponent(txt));
 }
-function saveCfg(){db.cfg={name:cName.value||'💰 Tandas PRO',cur:cCur.value||'€',col:cCol.value};save();theme();go('vList');}
-theme();rList();
-</script>
-</body>
-</html>
