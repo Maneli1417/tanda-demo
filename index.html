@@ -122,7 +122,7 @@ const theme=()=>{
   document.querySelectorAll('.cur').forEach(e=>e.innerText=db.cfg.cur);
 };
 function inst(){
-  alert('📲 Cómo guardarla en la pantalla de tu móvil:\n\n• En Android (Chrome):\n1. Toca los 3 puntos (⋮) arriba a la derecha.\n2. Toca "Añadir a pantalla de inicio".\n3. Elige "Crear acceso directo" y dale a Añadir.\n\n• En iPhone (Safari):\n1. Toca Compartir (⬆️) abajo.\n2. Toca "Añadir a pantalla de inicio" y dale a Añadir.');
+  alert('📲 Cómo guardarla en tu móvil:\n\n• Android (Chrome):\n1. Toca los 3 puntos (⋮) arriba a la derecha.\n2. Toca "Añadir a pantalla de inicio".\n3. Elige "Crear acceso directo".\n\n• iPhone (Safari):\n1. Toca Compartir (⬆️) abajo.\n2. Toca "Añadir a pantalla de inicio".');
 }
 function go(v){
   ['vList','vNew','vAct','vCfg'].forEach(id=>document.getElementById(id).classList.add('hide'));
@@ -170,7 +170,12 @@ function rAct(){
   bPrev.disabled=t.r===0;
 }
 function tog(i){let t=db.ts.find(x=>x.id===curId);t.pay[t.r+'_'+i]=!t.pay[t.r+'_'+i];save();rAct();}
-function step(d){let t=db.ts.find(x=>x.id===curId);if(t.r+d>=0&&t.r+d<t.ms.length){t.r+=d;save();rAct();}else if(t.r+d>=t.ms.length)alert('🎉 ¡Tanda completada!');}
+function step(d){
+  let t=db.ts.find(x=>x.id===curId);
+  let nxt=t.r+d;
+  if(nxt>=0 && nxt!==t.ms.length){t.r=nxt;save();rAct();}
+  else if(nxt===t.ms.length)alert('🎉 ¡Tanda completada!');
+}
 function delT(){if(confirm('¿Eliminar tanda?')){db.ts=db.ts.filter(x=>x.id!==curId);save();go('vList');}}
 function waAll(){
   let t=db.ts.find(x=>x.id===curId),c=db.cfg.cur;
@@ -182,3 +187,4 @@ function waOne(i,p){
   let txt=p?`✅ Hola *${t.ms[i]}*, recibido tu aporte de *${t.amt}${c}* (Ronda ${t.r+1} - ${t.name}).`:`👋 Hola *${t.ms[i]}*, te recuerdo tu aporte de *${t.amt}${c}* para la Ronda ${t.r+1} de *${t.name}*.`;
   window.open(waUrl+encodeURIComponent(txt));
 }
+function saveCfg(){db.cfg={name:cName.value||'💰 Tandas PRO',cur:cCur.value||'€',col:cCol.value};save();theme();go('vList');}
