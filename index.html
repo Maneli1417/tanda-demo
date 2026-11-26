@@ -2,16 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#2563eb">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Tandas PRO</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232563eb'/><text y='.9em' font-size='75' x='12'>💰</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232563eb'/><text y='.9em' font-size='75' x='12'>💰</text></svg>">
 <style>
 :root{--p:#2563eb;--s:#16a34a;--w:#25D366;--d:#dc2626;--bg:#f1f5f9;--c:#fff;--t:#0f172a;--m:#64748b;--b:#e2e8f0}
-*{box-sizing:border-box;font-family:system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;font-family:system-ui,sans-serif}
 body{background:var(--bg);color:var(--t);margin:0;padding:15px;display:flex;justify-content:center}
 .box{width:100%;max-width:500px;padding-bottom:40px}
 .top,.card{background:var(--c);border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid var(--b);box-shadow:0 2px 6px rgba(0,0,0,.04)}
@@ -36,14 +32,14 @@ button.sm{padding:6px 10px;font-size:.8rem}
 .fill{background:var(--s);height:100%;transition:.3s}
 .paid{background:var(--s)!important;color:#fff!important}
 .hide{display:none!important}
-.inst-banner{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:10px 14px;border-radius:12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+.inst{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:10px 14px;border-radius:12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
 </style>
 </head>
 <body>
 <div class="box">
-  <div id="instBanner" class="inst-banner">
-    <span>📲 <b>Instala esta App</b> en tu inicio</span>
-    <button class="sm" onclick="installApp()">Instalar</button>
+  <div id="iBan" class="inst">
+    <span>📲 <b>Instala esta App</b> en tu móvil</span>
+    <button class="sm" onclick="inst()">Instalar</button>
   </div>
 
   <div class="top">
@@ -112,45 +108,6 @@ button.sm{padding:6px 10px;font-size:.8rem}
 </div>
 
 <script>
-// Manifiesto PWA dinámico
-const manifest = {
-  name: "Tandas PRO",
-  short_name: "Tandas",
-  start_url: location.href,
-  display: "standalone",
-  background_color: "#f1f5f9",
-  theme_color: "#2563eb",
-  icons: [{
-    src: "data:image/svg+xml,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%232563eb'/><text y='.9em' font-size='75' x='12'>💰</text></svg>",
-    sizes: "192x192",
-    type: "image/svg+xml"
-  }]
-};
-const mBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-const mLink = document.createElement('link');
-mLink.rel = 'manifest';
-mLink.href = URL.createObjectURL(mBlob);
-document.head.appendChild(mLink);
-
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-});
-
-if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-  document.getElementById('instBanner').classList.add('hide');
-}
-
-function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
-  } else {
-    alert('📲 Para instalarla en tu móvil:\n\n• En Android (Chrome): Toca los 3 puntos (⋮) arriba a la derecha > "Añadir a pantalla de inicio".\n• En iPhone (Safari): Toca el botón Compartir (⬆️) abajo > "Añadir a pantalla de inicio".');
-  }
-}
-
 let db = JSON.parse(localStorage.getItem('tpro')) || {
   cfg:{name:'💰 Tandas PRO',cur:'€',col:'#2563eb'},
   ts:[{id:1,name:'Tanda Ejemplo',amt:50,freq:'Mensual',ms:['Ana','Carlos','Lucía','Miguel'],r:0,pay:{'0_0':1}}]
@@ -164,6 +121,9 @@ const theme=()=>{
   document.title=db.cfg.name;
   document.querySelectorAll('.cur').forEach(e=>e.innerText=db.cfg.cur);
 };
+function inst(){
+  alert('📲 Para instalarla como App:\n\n• Android (Chrome): Toca los 3 puntos (⋮) arriba a la derecha > "Añadir a pantalla de inicio".\n• iPhone (Safari): Toca Compartir (⬆️) abajo > "Añadir a pantalla de inicio".');
+}
 function go(v){
   ['vList','vNew','vAct','vCfg'].forEach(id=>document.getElementById(id).classList.add('hide'));
   document.getElementById(v).classList.remove('hide');
@@ -193,3 +153,37 @@ function saveT(){
 function openT(id){curId=id;go('vAct');rAct();}
 function rAct(){
   let t=db.ts.find(x=>x.id===curId),c=db.cfg.cur,tot=t.ms.length,pot=t.amt*tot,cnt=0;
+  aTitle.innerText=t.name;aSub.innerText=`${t.amt}${c} • ${t.freq}`;
+  rBadge.innerText=`Ronda ${t.r+1}/${tot}`;wName.innerText=t.ms[t.r];tPot.innerText=`Bote: ${pot}${c}`;
+  aList.innerHTML=t.ms.map((m,i)=>{
+    let p=!!t.pay[t.r+'_'+i];if(p)cnt++;
+    return `<div class="item">
+      <span><b>${i+1}.</b> ${m} ${i===t.r?'👑':''}</span>
+      <div>
+        <button class="sm wa" onclick="waOne(${i},${p})">📲</button>
+        <button class="sm ${p?'paid':'sec'}" onclick="tog(${i})">${p?'✓ Pagado':'Pendiente'}</button>
+      </div>
+    </div>`;
+  }).join('');
+  cStat.innerText=`${cnt*t.amt}${c} / ${pot}${c}`;
+  pFill.style.width=(cnt/tot*100)+'%';
+  bPrev.disabled=t.r===0;
+}
+function tog(i){let t=db.ts.find(x=>x.id===curId);t.pay[t.r+'_'+i]=!t.pay[t.r+'_'+i];save();rAct();}
+function step(d){let t=db.ts.find(x=>x.id===curId);if(t.r+d>=0&&t.r+d<t.ms.length){t.r+=d;save();rAct();}else if(t.r+d>=t.ms.length)alert('🎉 ¡Tanda completada!');}
+function delT(){if(confirm('¿Eliminar tanda?')){db.ts=db.ts.filter(x=>x.id!==curId);save();go('vList');}}
+function waAll(){
+  let t=db.ts.find(x=>x.id===curId),c=db.cfg.cur;
+  let txt=`*${t.name}*\nRonda ${t.r+1}/${t.ms.length}\n👑 Cobra: *${t.ms[t.r]}* (${t.amt*t.ms.length}${c})\n\n`+t.ms.map((m,i)=>`${t.pay[t.r+'_'+i]?'✅':'⏳'} ${m}`).join('\n');
+  window.open(waUrl+encodeURIComponent(txt));
+}
+function waOne(i,p){
+  let t=db.ts.find(x=>x.id===curId),c=db.cfg.cur;
+  let txt=p?`✅ Hola *${t.ms[i]}*, recibido tu aporte de *${t.amt}${c}* (Ronda ${t.r+1} - ${t.name}).`:`👋 Hola *${t.ms[i]}*, te recuerdo tu aporte de *${t.amt}${c}* para la Ronda ${t.r+1} de *${t.name}*.`;
+  window.open(waUrl+encodeURIComponent(txt));
+}
+function saveCfg(){db.cfg={name:cName.value||'💰 Tandas PRO',cur:cCur.value||'€',col:cCol.value};save();theme();go('vList');}
+theme();rList();
+</script>
+</body>
+</html>
