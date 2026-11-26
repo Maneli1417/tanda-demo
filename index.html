@@ -1,175 +1,178 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gestor PRO de Tandas</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --success: #16a34a;
-            --whatsapp: #25D366;
-            --warning: #f59e0b;
-            --danger: #dc2626;
-            --bg: #f1f5f9;
-            --card: #ffffff;
-            --text: #0f172a;
-            --muted: #64748b;
-            --border: #e2e8f0;
-        }
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); margin: 0; padding: 15px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 550px; padding-bottom: 40px; }
-        
-        /* Header */
-        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; background: var(--card); padding: 14px 18px; border-radius: 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border: 1px solid var(--border); }
-        .brand-title { font-size: 1.2rem; font-weight: 800; color: var(--primary); margin: 0; display: flex; align-items: center; gap: 8px; }
-        .icon-btn { background: var(--bg); color: var(--text); border: 1px solid var(--border); width: 38px; height: 38px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer; padding: 0; }
-        
-        /* Cards & Layout */
-        .card { background: var(--card); border-radius: 14px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); margin-bottom: 16px; border: 1px solid var(--border); }
-        h2 { font-size: 1.15rem; margin: 0 0 12px 0; }
-        h3 { font-size: 0.95rem; margin: 16px 0 10px 0; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-group { margin-bottom: 12px; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: var(--muted); }
-        input, select { width: 100%; padding: 11px; border: 1px solid var(--border); border-radius: 10px; font-size: 1rem; background: #fff; }
-        input:focus, select:focus { outline: none; border-color: var(--primary); }
-        .row { display: flex; gap: 10px; }
-        .row > * { flex: 1; }
-        
-        /* Buttons */
-        button { background: var(--primary); color: white; border: none; padding: 12px 16px; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 0.95rem; display: inline-flex; align-items: center; justify-content: center; gap: 6px; transition: opacity 0.2s; }
-        button:active { opacity: 0.85; }
-        button.secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
-        button.whatsapp { background: var(--whatsapp); color: #fff; }
-        button.danger { background: #fee2e2; color: var(--danger); }
-        button.small { padding: 7px 11px; font-size: 0.82rem; border-radius: 8px; }
-        button:disabled { opacity: 0.4; cursor: not-allowed; }
-        .full-btn { width: 100%; }
-
-        /* Tanda List Items */
-        .tanda-card { display: flex; justify-content: space-between; align-items: center; padding: 14px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.2s; }
-        .tanda-card:hover { border-color: var(--primary); }
-        .badge { background: #dbeafe; color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; }
-        
-        /* Active Tanda View */
-        .winner-box { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #bbf7d0; padding: 16px; border-radius: 12px; margin-bottom: 16px; text-align: center; }
-        .winner-label { font-size: 0.78rem; font-weight: 700; color: #15803d; letter-spacing: 0.5px; }
-        .winner-name { font-size: 1.4rem; font-weight: 800; color: #14532d; margin: 4px 0; }
-        .pot-amount { font-size: 1rem; font-weight: 700; color: #166534; }
-        
-        .progress-bar { background: var(--border); height: 10px; border-radius: 6px; overflow: hidden; margin: 8px 0 16px 0; }
-        .progress-fill { background: var(--success); height: 100%; transition: width 0.3s ease; }
-
-        .member-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); gap: 8px; }
-        .member-row:last-child { border-bottom: none; }
-        .member-info { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-        .turn-num { background: var(--text); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
-        .member-name { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .actions { display: flex; gap: 6px; flex-shrink: 0; }
-        .pay-toggle.paid { background: var(--success); color: white; border: none; }
-        
-        .hidden { display: none !important; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tandas PRO</title>
+<style>
+:root{--p:#2563eb;--s:#16a34a;--w:#25D366;--d:#dc2626;--bg:#f1f5f9;--c:#fff;--t:#0f172a;--m:#64748b;--b:#e2e8f0}
+*{box-sizing:border-box;font-family:system-ui,sans-serif}
+body{background:var(--bg);color:var(--t);margin:0;padding:15px;display:flex;justify-content:center}
+.box{width:100%;max-width:500px;padding-bottom:40px}
+.top,.card{background:var(--c);border-radius:14px;padding:16px;margin-bottom:14px;border:1px solid var(--b);box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.top{display:flex;justify-content:space-between;align-items:center}
+h1{font-size:1.2rem;margin:0;color:var(--p)}
+h2{font-size:1.1rem;margin:0 0 12px}
+label{display:block;font-size:.82rem;font-weight:600;color:var(--m);margin:10px 0 4px}
+input,select{width:100%;padding:10px;border:1px solid var(--b);border-radius:9px;font-size:1rem}
+.row{display:flex;gap:8px}.row>*{flex:1}
+button{background:var(--p);color:#fff;border:none;padding:11px 14px;border-radius:9px;font-weight:600;cursor:pointer;font-size:.9rem}
+button.sec{background:var(--bg);color:var(--t);border:1px solid var(--b)}
+button.wa{background:var(--w)}
+button.del{background:#fee2e2;color:var(--d)}
+button.sm{padding:6px 10px;font-size:.8rem}
+.full{width:100%;margin-top:8px}
+.item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--b)}
+.item:last-child{border-bottom:none}
+.tcard{border:1px solid var(--b);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.badge{background:#dbeafe;color:var(--p);padding:4px 9px;border-radius:15px;font-size:.75rem;font-weight:700}
+.win{background:#f0fdf4;border:1px solid #bbf7d0;padding:14px;border-radius:10px;text-align:center;margin-bottom:12px}
+.bar{background:var(--b);height:9px;border-radius:5px;overflow:hidden;margin:6px 0 14px}
+.fill{background:var(--s);height:100%;transition:.3s}
+.paid{background:var(--s)!important;color:#fff!important}
+.hide{display:none!important}
+</style>
 </head>
 <body>
-
-<div class="container">
-    <!-- CABECERA -->
-    <div class="topbar">
-        <h1 class="brand-title" id="headerBrandName">💰 Tandas PRO</h1>
-        <div style="display: flex; gap: 8px;">
-            <button class="icon-btn hidden" id="btnHome" onclick="showView('listView')" title="Mis Tandas">🏠</button>
-            <button class="icon-btn" onclick="showView('settingsView')" title="Ajustes de Marca">⚙️</button>
-        </div>
+<div class="box">
+  <div class="top">
+    <h1 id="bTitle">💰 Tandas PRO</h1>
+    <div>
+      <button class="sec sm hide" id="btnHome" onclick="go('vList')">🏠</button>
+      <button class="sec sm" onclick="go('vCfg')">⚙️</button>
     </div>
+  </div>
 
-    <!-- VISTA 1: LISTA DE TANDAS -->
-    <div id="listView" class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-            <h2 style="margin:0;">Mis Tandas Activas</h2>
-            <button class="small" onclick="openCreateView()">+ Nueva Tanda</button>
-        </div>
-        <div id="tandasListContainer"></div>
+  <div id="vList" class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h2 style="margin:0">Mis Tandas</h2>
+      <button class="sm" onclick="openNew()">+ Nueva Tanda</button>
     </div>
+    <div id="listBox"></div>
+  </div>
 
-    <!-- VISTA 2: CREAR NUEVA TANDA -->
-    <div id="createView" class="card hidden">
-        <h2>Crear Nueva Tanda</h2>
-        <div class="form-group">
-            <label>Nombre de la tanda</label>
-            <input type="text" id="newTandaName" placeholder="Ej. Tanda Navidad 2026">
-        </div>
-        <div class="row">
-            <div class="form-group">
-                <label>Aporte por turno (<span class="currLabel">€</span>)</label>
-                <input type="number" id="newTandaAmount" value="50" min="1">
-            </div>
-            <div class="form-group">
-                <label>Frecuencia</label>
-                <select id="newTandaFreq">
-                    <option value="Semanal">Semanal</option>
-                    <option value="Quincenal">Quincenal</option>
-                    <option value="Mensual" selected>Mensual</option>
-                </select>
-            </div>
-        </div>
-
-        <h3>Participantes (<span id="draftCount">0</span>)</h3>
-        <div class="row" style="margin-bottom: 12px;">
-            <input type="text" id="newMemberInput" placeholder="Nombre del participante..." onkeypress="if(event.key==='Enter') addDraftMember()">
-            <button onclick="addDraftMember()" style="flex: 0 0 auto;">Añadir</button>
-        </div>
-        <div id="draftMembersList" style="margin-bottom: 15px;"></div>
-
-        <div class="row">
-            <button class="secondary" onclick="shuffleDraft()">🎲 Sortear Orden</button>
-            <button onclick="saveNewTanda()">🚀 Crear Tanda</button>
-        </div>
-        <button class="secondary full-btn" style="margin-top: 10px;" onclick="showView('listView')">Cancelar</button>
+  <div id="vNew" class="card hide">
+    <h2>Nueva Tanda</h2>
+    <label>Nombre</label><input id="nName" placeholder="Ej. Tanda Amigos">
+    <div class="row">
+      <div><label>Aporte (<span class="cur">€</span>)</label><input type="number" id="nAmt" value="50"></div>
+      <div><label>Frecuencia</label><select id="nFreq"><option>Semanal</option><option>Quincenal</option><option selected>Mensual</option></select></div>
     </div>
+    <label>Participantes (<span id="dCnt">0</span>)</label>
+    <div class="row"><input id="mInp" placeholder="Nombre..."><button onclick="addM()" style="flex:0">Añadir</button></div>
+    <div id="dList" style="margin:10px 0"></div>
+    <div class="row"><button class="sec" onclick="shuf()">🎲 Sortear</button><button onclick="saveT()">🚀 Crear</button></div>
+    <button class="sec full" onclick="go('vList')">Cancelar</button>
+  </div>
 
-    <!-- VISTA 3: GESTIÓN DE TANDA ACTIVA -->
-    <div id="activeView" class="card hidden">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-            <div>
-                <h2 id="activeTitle" style="margin:0;">Nombre Tanda</h2>
-                <small style="color: var(--muted);" id="activeSubtitle">50€ • Mensual</small>
-            </div>
-            <span class="badge" id="roundBadge">Ronda 1 de 5</span>
-        </div>
-
-        <div class="winner-box">
-            <div class="winner-label">👑 LE TOCA COBRAR EN ESTA RONDA A:</div>
-            <div class="winner-name" id="winnerName">Nombre</div>
-            <div class="pot-amount">Bote a entregar: <span id="totalPot">0</span></div>
-        </div>
-
-        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 700;">
-            <span>Recaudado esta ronda:</span>
-            <span id="collectedStats">0 / 0</span>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
-        </div>
-
-        <button class="whatsapp full-btn" style="margin-bottom: 16px;" onclick="shareGroupSummary()">
-            📲 Enviar Resumen al Grupo (WhatsApp)
-        </button>
-
-        <h3>Pagos de la Ronda <span id="roundNumTitle">1</span></h3>
-        <div id="activeMembersList"></div>
-
-        <div class="row" style="margin-top: 20px;">
-            <button class="secondary" id="btnPrevRound" onclick="changeRound(-1)">← Anterior</button>
-            <button id="btnNextRound" onclick="changeRound(1)">Siguiente →</button>
-        </div>
-        <button class="danger full-btn" style="margin-top: 16px;" onclick="deleteCurrentTanda()">🗑️ Eliminar esta tanda</button>
+  <div id="vAct" class="card hide">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div><h2 id="aTitle" style="margin:0"></h2><small id="aSub" style="color:var(--m)"></small></div>
+      <span class="badge" id="rBadge"></span>
     </div>
+    <div class="win">
+      <small style="color:#15803d;font-weight:700">👑 LE TOCA COBRAR A:</small>
+      <div id="wName" style="font-size:1.3rem;font-weight:800;color:#14532d;margin:4px 0"></div>
+      <b id="tPot" style="color:#166534"></b>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:.82rem;font-weight:700">
+      <span>Recaudado:</span><span id="cStat"></span>
+    </div>
+    <div class="bar"><div class="fill" id="pFill"></div></div>
+    <button class="wa full" style="margin-bottom:12px" onclick="waAll()">📲 Resumen al Grupo (WhatsApp)</button>
+    <div id="aList"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="sec" id="bPrev" onclick="step(-1)">← Anterior</button>
+      <button id="bNext" onclick="step(1)">Siguiente →</button>
+    </div>
+    <button class="del full" onclick="delT()">🗑️ Eliminar Tanda</button>
+  </div>
 
-    <!-- VISTA 4: AJUSTES Y MARCA BLANCA -->
-    <div id="settingsView" class="card hidden">
-        <h2>⚙️ Personalización y Datos</h2>
-        <div class="form-group">
-            <label>Nombre de tu negocio / App (Marca Blanca)</label>
+  <div id="vCfg" class="card hide">
+    <h2>⚙️ Personalización</h2>
+    <label>Nombre de tu Marca</label><input id="cName">
+    <div class="row">
+      <div><label>Moneda</label><input id="cCur"></div>
+      <div><label>Color</label><input type="color" id="cCol" style="height:42px;padding:3px"></div>
+    </div>
+    <button class="full" onclick="saveCfg()">💾 Guardar Cambios</button>
+    <button class="sec full" onclick="go('vList')">← Volver</button>
+  </div>
+</div>
+
+<script>
+let db = JSON.parse(localStorage.getItem('tpro')) || {
+  cfg:{name:'💰 Tandas PRO',cur:'€',col:'#2563eb'},
+  ts:[{id:1,name:'Tanda Ejemplo',amt:50,freq:'Mensual',ms:['Ana','Carlos','Lucía','Miguel'],r:0,pay:{'0_0':1}}]
+};
+let curId=null, draft=[];
+const waUrl = 'https:/' + '/wa.me/?text=';
+const save=()=>localStorage.setItem('tpro',JSON.stringify(db));
+const theme=()=>{
+  document.documentElement.style.setProperty('--p',db.cfg.col);
+  document.getElementById('bTitle').innerText=db.cfg.name;
+  document.querySelectorAll('.cur').forEach(e=>e.innerText=db.cfg.cur);
+};
+function go(v){
+  ['vList','vNew','vAct','vCfg'].forEach(id=>document.getElementById(id).classList.add('hide'));
+  document.getElementById(v).classList.remove('hide');
+  document.getElementById('btnHome').classList.toggle('hide',v==='vList');
+  if(v==='vList') rList();
+  if(v==='vCfg'){cName.value=db.cfg.name;cCur.value=db.cfg.cur;cCol.value=db.cfg.col;}
+}
+function rList(){
+  listBox.innerHTML=db.ts.length?db.ts.map(t=>`
+    <div class="tcard" onclick="openT(${t.id})">
+      <div><b>${t.name}</b><br><small style="color:var(--m)">${t.ms.length} pers. • ${t.amt}${db.cfg.cur} (${t.freq})</small></div>
+      <span class="badge">Ronda ${t.r+1}/${t.ms.length}</span>
+    </div>`).join(''):'<p style="text-align:center;color:var(--m)">No hay tandas. Crea una nueva.</p>';
+}
+function openNew(){draft=[];nName.value='';rDraft();go('vNew');}
+function addM(){if(mInp.value.trim()){draft.push(mInp.value.trim());mInp.value='';rDraft();}}
+function rDraft(){
+  dCnt.innerText=draft.length;
+  dList.innerHTML=draft.map((m,i)=>`<div class="item"><span><b>${i+1}.</b> ${m}</span><button class="del sm" onclick="draft.splice(${i},1);rDraft()">✕</button></div>`).join('');
+}
+function shuf(){draft.sort(()=>Math.random()-.5);rDraft();}
+function saveT(){
+  if(draft.length<2)return alert('Mínimo 2 personas');
+  let t={id:Date.now(),name:nName.value||'Mi Tanda',amt:+nAmt.value||50,freq:nFreq.value,ms:[...draft],r:0,pay:{}};
+  db.ts.push(t);save();openT(t.id);
+}
+function openT(id){curId=id;go('vAct');rAct();}
+function rAct(){
+  let t=db.ts.find(x=>x.id===curId),c=db.cfg.cur,tot=t.ms.length,pot=t.amt*tot,cnt=0;
+  aTitle.innerText=t.name;aSub.innerText=`${t.amt}${c} • ${t.freq}`;
+  rBadge.innerText=`Ronda ${t.r+1}/${tot}`;wName.innerText=t.ms[t.r];tPot.innerText=`Bote: ${pot}${c}`;
+  aList.innerHTML=t.ms.map((m,i)=>{
+    let p=!!t.pay[t.r+'_'+i];if(p)cnt++;
+    return `<div class="item">
+      <span><b>${i+1}.</b> ${m} ${i===t.r?'👑':''}</span>
+      <div>
+        <button class="sm wa" onclick="waOne(${i},${p})">📲</button>
+        <button class="sm ${p?'paid':'sec'}" onclick="tog(${i})">${p?'✓ Pagado':'Pendiente'}</button>
+      </div>
+    </div>`;
+  }).join('');
+  cStat.innerText=`${cnt*t.amt}${c} / ${pot}${c}`;
+  pFill.style.width=(cnt/tot*100)+'%';
+  bPrev.disabled=t.r===0;
+}
+function tog(i){let t=db.ts.find(x=>x.id===curId);t.pay[t.r+'_'+i]=!t.pay[t.r+'_'+i];save();rAct();}
+function step(d){let t=db.ts.find(x=>x.id===curId);if(t.r+d>=0&&t.r+d<t.ms.length){t.r+=d;save();rAct();}else if(t.r+d>=t.ms.length)alert('🎉 ¡Tanda completada!');}
+function delT(){if(confirm('¿Eliminar tanda?')){db.ts=db.ts.filter(x=>x.id!==curId);save();go('vList');}}
+function waAll(){
+  let t=db.ts.find(x=>x.id===curId),c=db.cfg.cur;
+  let txt=`*${t.name}*\nRonda ${t.r+1}/${t.ms.length}\n👑 Cobra: *${t.ms[t.r]}* (${t.amt*t.ms.length}${c})\n\n`+t.ms.map((m,i)=>`${t.pay[t.r+'_'+i]?'✅':'⏳'} ${m}`).join('\n');
+  window.open(waUrl+encodeURIComponent(txt));
+}
+function waOne(i,p){
+  let t=db.ts.find(x=>x.id===curId),c=db.cfg.cur;
+  let txt=p?`✅ Hola *${t.ms[i]}*, recibido tu aporte de *${t.amt}${c}* (Ronda ${t.r+1} - ${t.name}).`:`👋 Hola *${t.ms[i]}*, te recuerdo tu aporte de *${t.amt}${c}* para la Ronda ${t.r+1} de *${t.name}*.`;
+  window.open(waUrl+encodeURIComponent(txt));
+}
+function saveCfg(){db.cfg={name:cName.value||'💰 Tandas PRO',cur:cCur.value||'€',col:cCol.value};save();theme();go('vList');}
+theme();rList();
+</script>
+</body>
+</html>
